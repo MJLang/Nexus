@@ -1,0 +1,30 @@
+{
+  "name": "nexus",
+  "version": "1.0.0",
+  "description": "Heroes of the Storm Replay Parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "tsc"
+  },
+  "author": "Martin Lang-Roman <martin@mercator.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/gulp": "^3.8.32",
+    "@types/gulp-sourcemaps": "0.0.29",
+    "@types/gulp-typescript": "0.0.32",
+    "@types/mocha": "^2.2.32",
+    "@types/sinon": "^1.16.31",
+    "chai": "^3.5.0",
+    "eslint": "^3.9.1",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-typescript": "^3.1.2",
+    "mocha": "^3.1.2",
+    "require-dir": "^0.3.1",
+    "sinon": "^1.17.6",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.6"
+  }
+}
