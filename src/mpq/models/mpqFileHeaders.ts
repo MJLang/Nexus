@@ -1,4 +1,7 @@
+import { MPQUserDataHeader } from './mpqUserdataHeader';
+
 export class MPQFileHeader {
+  public offset: number;
   public magic: string;
   public headerSize: number;
   public archiveSize: number;
@@ -8,6 +11,13 @@ export class MPQFileHeader {
   public blockTableOffset: number;
   public hashTableEntries: number;
   public blockTableEntries: number;
+
+  public userDataHeader: MPQUserDataHeader;
+
+  // EXT DATA;
+  public extendedBlockTableOffset: number;
+  public hashTableOffsetHigh: number;
+  public blockTableOffsetHigh: number;
 
   constructor(obj?: Buffer) {
     this.magic              = obj && obj.toString('utf8', 0, 4)    || null;
