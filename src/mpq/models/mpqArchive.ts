@@ -39,10 +39,8 @@ export class MPQArchive {
       for (let j = 0; j < 5; j += 1) {
         seed = seed.mul(125).add(3).mod(0x2AAAAB);
         let t1 = seed.and(0xFFFF).shiftLeft(0x10);
-        
         seed = seed.mul(125).add(3).mod(0x2AAAAB);
         let t2 = seed.and(0xFFFF);
-        
         table[index] = t1.or(t2).toNumber();
         index += 0x100;
       }
@@ -51,8 +49,8 @@ export class MPQArchive {
   }
 
   constructor(fileName: string | Buffer, listFile?: boolean) {
-    console.log('listfile listfile');
-	  if (typeof listFile === 'undefined') this.listfile = true;
+    if (typeof listFile === 'undefined')
+      this.listfile = true;
 
 
     if (fileName instanceof Buffer) {
@@ -65,13 +63,77 @@ export class MPQArchive {
     this.header = this.readHeader();
     this.hashTable = this.readTable(TableType.hash);
     this.blockTable = this.readTable(TableType.block);
-    
     if (this.listfile) {
       this.files = this.readFile('(listfile)').toString().trim().split('\r\n');
     } else {
       this.files = null;
     }
   }
+
+  public extractFiles(filenames: Array<string>) {
+    filenames.forEach(fn => writeFileSync(fn, this.readFile(fn)));
+  }
+
+  public printHeaders() {
+    console.log('MPQ archive header');
+    console.log('------------------');
+    for (let key in this.header) {
+      if (key === 'userDataHeader') continue;
+      console.log(key + ' - ' + this.header[key]);
+    }
+
+    if (this.header.userDataHeader) {
+      console.log();
+      console.log('MPQ user data header');
+      console.log('--------------------');
+      console.log();
+      for (let key in this.header.userDataHeader) {
+        console.log(key + ' - ' + this.header.userDataHeader[key]);
+      }
+    }
+    console.log();
+  }
+
+  public printHashTable = function() {
+    console.log('MPQ archive hash table');
+    console.log('----------------------');
+    console.log('Hash A\t\tHash B\t\tLocl\tPlat\tBlockIdx');
+    let format = [8, 8, 4, 4, 8];
+    this.hashTable.forEach(entry => {
+      console.log(Object.keys(entry).map((key, i) => {
+        return this.formatWord(entry[key], format[i]);
+      }).join('\t'));
+    });
+    console.log();
+  };
+
+  public printBlockTable = function() {
+    console.log('MPQ archive block table');
+    console.log('-----------------------');
+    console.log('Offset\t\tArchSize\tRealSize\tFlags');
+    this.blockTable.forEach(entry => {
+      console.log([
+        this.formatWord(entry.offset, 8),
+        this.leadingChar(entry.archivedSize, ' ', 8),
+        this.leadingChar(entry.size, ' ', 8),
+        this.formatWord(entry.flags, 8)
+      ].join('\t'));
+    });
+    console.log();
+  };
+
+  public printFiles = function() {
+    let width = this.files.reduce((top, filename) => Math.max(top, filename.length), 0), hashEntry, blockEntry;
+    
+    console.log('Files');
+    console.log('-----');
+    for (let filename of this.files) {
+      hashEntry = this.getHashTableEntry(filename);
+      blockEntry = this.blockTable[hashEntry.blockTableIndex];
+      
+      console.log(this.leadingChar(filename, ' ', width, true) + ' ' + this.leadingChar(blockEntry.size, ' ', 8) + ' bytes');
+    }
+  };
 
   private readHeader(): MPQFileHeader {
     let magic = this.file.toString('utf8', 0, 4);
@@ -127,11 +189,11 @@ export class MPQArchive {
     let data = this.file.slice(tableOffset + this.header.offset, tableOffset + this.header.offset + tableEntries * 16);
 
     data = this.decrypt(data, key);
-    
+
     let entries = [];
     for (let i = 0; i < tableEntries; i += 1) {
       entries[i] = new type(data.slice(i * 16, i * 16 + 16));
-	  }
+    }
     return entries;
   }
 
@@ -145,9 +207,12 @@ export class MPQArchive {
 
   private decompress(data: Buffer) {
     let compressionType = data.readUInt8(0);
-    if (compressionType === 0) return data;
-    else if (compressionType === 2) return unzipSync(data.slice(1));
-    else if (compressionType === 16) return bzip.decode(data.slice(1));
+    if (compressionType === 0)
+      return data;
+    else if (compressionType === 2) 
+      return unzipSync(data.slice(1));
+    else if (compressionType === 16) 
+      return bzip.decode(data.slice(1));
     else throw new Error('Unsupported Compression Type');
   }
 
@@ -168,7 +233,6 @@ export class MPQArchive {
       }
 
       if (!(blockEntry.flags & MPQ_FILE_SINGLE_UNIT)) {
-        // throw new Error('Single Unit not implemented');
 
         let sectorSize = 512 << this.header.sectorSizeShift;
         let sectors = Math.trunc(blockEntry.size / sectorSize) + 1;
@@ -236,29 +300,7 @@ export class MPQArchive {
     });
   }
 
-  public extractFiles(filenames: Array<string>) {
-    filenames.forEach(fn => writeFileSync(fn, this.readFile(fn)));
-  }
 
-  public printHeaders() {
-    console.log('MPQ archive header');
-    console.log('------------------');
-    for (let key in this.header) {
-      if (key === 'userDataHeader') continue;
-      console.log(key + ' - ' + this.header[key]);
-    }
-    
-    if (this.header.userDataHeader) {
-      console.log();
-      console.log('MPQ user data header');
-      console.log('--------------------');
-      console.log();
-      for (let key in this.header.userDataHeader) {
-        console.log(key + ' - ' + this.header.userDataHeader[key]);
-      }
-    }
-    console.log();
-  }
 
   private leadingChar(str, ch, ln, after?) {
     str = '' + str;
@@ -271,47 +313,6 @@ export class MPQArchive {
   private formatWord(data, ln) {
     return this.leadingChar(data.toString(16).toUpperCase(), '0', ln);
   }
-
-  public printHashTable = function() {
-    console.log('MPQ archive hash table');
-    console.log('----------------------');
-    console.log('Hash A\t\tHash B\t\tLocl\tPlat\tBlockIdx');
-    let format = [8, 8, 4, 4, 8];
-    this.hashTable.forEach(entry => {
-      console.log(Object.keys(entry).map((key, i) => {
-        return this.formatWord(entry[key], format[i]);
-      }).join('\t'));
-    });
-    console.log();
-  };
-
-  public printBlockTable = function() {
-    console.log('MPQ archive block table');
-    console.log('-----------------------');
-    console.log('Offset\t\tArchSize\tRealSize\tFlags');
-    this.blockTable.forEach(entry => {
-      console.log([
-        this.formatWord(entry.offset, 8),
-        this.leadingChar(entry.archivedSize, ' ', 8),
-        this.leadingChar(entry.size, ' ', 8),
-        this.formatWord(entry.flags, 8)
-      ].join('\t'));
-    });
-    console.log();
-  };
-
-  public printFiles = function() {
-    let width = this.files.reduce((top, filename) => Math.max(top, filename.length), 0), hashEntry, blockEntry;
-    
-    console.log('Files');
-    console.log('-----');
-    for (let filename of this.files) {
-      hashEntry = this.getHashTableEntry(filename);
-      blockEntry = this.blockTable[hashEntry.blockTableIndex];
-      
-      console.log(this.leadingChar(filename, ' ', width, true) + ' ' + this.leadingChar(blockEntry.size, ' ', 8) + ' bytes');
-    }
-  };
 
   private hash(str: string, hashType: string) {
     let seed1 = Long.fromValue(0x7FED7FED);
@@ -340,18 +341,15 @@ export class MPQArchive {
       seed2 = seed2.and(0xFFFFFFFF);
       let value = Long.fromValue(data.readUInt32LE(i * 4));
       value = value.xor(seed1.add(seed2)).and(0xFFFFFFFF);
-      
+
       seed1 = seed1.xor(-1).shiftLeft(0x15).add(0x11111111).or(seed1.shiftRight(0x0B));
       seed1 = seed1.and(0xFFFFFFFF);
       seed2 = value.add(seed2).add(seed2.shiftLeft(5)).add(3).and(0xFFFFFFFF);
-      
+
       result.writeUInt32BE(value.toNumber(), i * 4);
     }
     return result;
   }
-
-
-
 }
 
 
@@ -362,8 +360,8 @@ enum TableType {
 }
 
 const hashTypes = {
-	'TABLE_OFFSET': 0,
-	'HASH_A': 		1,
-	'HASH_B': 		2,
-	'TABLE': 		3
+  TABLE_OFFSET:   0,
+  HASH_A: 		    1,
+  HASH_B: 	    	2,
+  TABLE: 	      	3
 };
