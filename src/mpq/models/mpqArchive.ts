@@ -50,8 +50,10 @@ export class MPQArchive {
     return table;
   }
 
-  constructor(fileName: string | Buffer, listFile = false) {
-    this.listfile = !!listFile;
+  constructor(fileName: string | Buffer, listFile?: boolean) {
+    console.log('listfile listfile');
+	  if (typeof listFile === 'undefined') this.listfile = true;
+
 
     if (fileName instanceof Buffer) {
       this.file = fileName;
@@ -122,7 +124,7 @@ export class MPQArchive {
     let tableOffset = this.header[TableType[tableType] + 'TableOffset'];
     let tableEntries = this.header[TableType[tableType] + 'TableEntries'];
     let key = this.hash(`(${TableType[tableType]} table)`, 'TABLE');
-    let data = this.file.slice(tableOffset + this.header.offset, tableOffset + this.header.offset + tableEntries + 16);
+    let data = this.file.slice(tableOffset + this.header.offset, tableOffset + this.header.offset + tableEntries * 16);
 
     data = this.decrypt(data, key);
     
