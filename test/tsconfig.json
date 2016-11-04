@@ -6,8 +6,11 @@
         "sourceMap": false,
         "outDir": "lib"
     },
+    "include": [
+      "../src/**/*",
+      "models/**/*"
+    ],
     "exclude": [
-        "test",
         "node_modules",
         "lib"
     ]

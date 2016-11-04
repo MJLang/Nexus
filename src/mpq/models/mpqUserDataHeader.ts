@@ -5,6 +5,8 @@ export class MPQUserDataHeader {
   public mpqHeaderOffset: number;
   public userDataHeaderSize: number;
 
+  public content: Buffer;
+
   constructor(obj?: Buffer) {
     	this.magic              = obj && obj.toString('utf8', 0, 4) || null;
 	    this.userDataSize       = obj && obj.readUInt32LE(4)        || null;
