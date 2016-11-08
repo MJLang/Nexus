@@ -28,7 +28,7 @@ export class MPQArchive {
   public hashTable: Array<MPQHashTableEntry>;
   public blockTable: Array<MPQBlockTableEntry>;
 
-  private listfile: boolean;
+  private listfile: boolean = true;
 
   get encryptionTable(): any {
     let table = {};
@@ -49,8 +49,6 @@ export class MPQArchive {
   }
 
   constructor(fileName: string | Buffer, listFile?: boolean) {
-    if (typeof listFile === 'undefined')
-      this.listfile = true;
 
 
     if (fileName instanceof Buffer) {
@@ -278,7 +276,7 @@ export class MPQArchive {
     if (this.files) {
       return this.files.map(filename => [filename, this.readFile(filename)])
     } else {
-    throw new Error('Can\'t extract whole archive without listfile.');
+      throw new Error('Can\'t extract whole archive without listfile.');
     }
   }
 
