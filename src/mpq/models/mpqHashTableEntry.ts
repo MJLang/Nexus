@@ -6,10 +6,10 @@ export class MPQHashTableEntry {
   public blockTableIndex: number;
 
   constructor(obj?: Buffer) {
-    this.hashA            = obj && obj.readUInt32BE(0)  || null;
-    this.hashB            = obj && obj.readUInt32BE(4)  || null;
-    this.locale           = obj && obj.readUInt16BE(8)  || null;
-    this.platform         = obj && obj.readUInt16BE(10) || null;
-    this.blockTableIndex  = obj && obj.readUInt32BE(12) || null;
+    this.hashA            = obj && obj.readUInt32BE(0);
+    this.hashB            = obj && obj.readUInt32BE(4);
+    this.locale           = obj && obj.readUInt16BE(8);
+    this.platform         = obj && obj.readUInt16BE(10);
+    this.blockTableIndex  = obj && obj.readUInt32BE(12);
   }
 }

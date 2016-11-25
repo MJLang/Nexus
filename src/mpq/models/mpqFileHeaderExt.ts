@@ -4,8 +4,8 @@ export class MPQFileHeaderExt {
   public blockTableOffsetHigh: number;
 
   constructor(obj?: Buffer) {
-    this.extendedBlockTableOffset = obj && obj.readIntLE(0, 8)  || null;
-    this.hashTableOffsetHigh      = obj && obj.readInt8(8)      || null;
-    this.blockTableOffsetHigh     = obj && obj.readInt8(10)     || null;
+    this.extendedBlockTableOffset = obj && obj.readIntLE(0, 8);
+    this.hashTableOffsetHigh      = obj && obj.readInt8(8);
+    this.blockTableOffsetHigh     = obj && obj.readInt8(10);
   }
 }

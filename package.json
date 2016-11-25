@@ -4,8 +4,10 @@
   "description": "Heroes of the Storm Replay Parser",
   "main": "index.js",
   "scripts": {
-    "test": "test",
-    "build": "tsc"
+    
+    "pretest": "tsc -p test/tsconfig.json",
+    "test": "mocha --color --no-timeouts ./.test/test/**/*.js",
+    "test:debug": "npm run test -- --debug-brk"
   },
   "author": "Martin Lang-Roman <martin@mercator.io>",
   "license": "MIT",

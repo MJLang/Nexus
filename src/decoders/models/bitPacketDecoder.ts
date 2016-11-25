@@ -20,7 +20,8 @@ export class BitPacketDecoder {
     }
 
     let typeInfo = this.typeInfo[typeId];
-    return this[typeInfo[0]].apply(this, typeInfo[1]);
+    let functionToCall = (<string>typeInfo[0]).replace('_', '');
+    return this[functionToCall].apply(this, typeInfo[1]);
   }
 
   public byteAlign() {
@@ -28,11 +29,11 @@ export class BitPacketDecoder {
   }
 
   public done() {
-    this.data.done();
+    return this.data.done();
   }
 
   public usedBits() {
-    this.data.usedBits();
+    return this.data.usedBits();
   }
 
   private array(bounds: Array<number>, typeId) {

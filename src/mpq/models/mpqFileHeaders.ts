@@ -20,15 +20,14 @@ export class MPQFileHeader {
   public blockTableOffsetHigh: number;
 
   constructor(obj?: Buffer) {
-    this.magic              = obj && obj.toString('utf8', 0, 4)    || null;
-    this.headerSize         = obj && obj.readUInt32LE(4)           || null;
-    this.archiveSize        = obj && obj.readUInt32LE(8)           || null;
-    this.formatVersion      = obj && obj.readUInt16LE(12)          || null;
-    this.sectorSizeShift    = obj && obj.readUInt16LE(14)          || null;
-	  this.hashTableOffset    = obj && obj.readUInt32LE(16)          || null;
-    this.blockTableOffset   = obj && obj.readUInt32LE(20)          || null;
-    this.hashTableEntries   = obj && obj.readUInt32LE(24)          || null;
-    this.blockTableEntries  = obj && obj.readUInt32LE(28)          || null;
-  }
+    this.magic              = obj && obj.toString('utf8', 0, 4);
+    this.headerSize         = obj && obj.readUInt32LE(4);
+    this.archiveSize        = obj && obj.readUInt32LE(8);
+    this.formatVersion      = obj && obj.readUInt16LE(12);
+    this.sectorSizeShift    = obj && obj.readUInt16LE(14);
+	  this.hashTableOffset    = obj && obj.readUInt32LE(16);
+    this.blockTableOffset   = obj && obj.readUInt32LE(20);
+    this.hashTableEntries   = obj && obj.readUInt32LE(24);
+    this.blockTableEntries  = obj && obj.readUInt32LE(28);
 }
 

@@ -3,5 +3,8 @@ const mocha = require('gulp-mocha');
 
 gulp.task('test', ['ts:test'], () => {
   return gulp.src('./.test/test/**/*.js')
-             .pipe(mocha({reporter: 'spec'}));
+             .pipe(mocha({  
+                          reporter: 'spec',
+                          timeout: false
+                          }));
 })

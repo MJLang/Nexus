@@ -8,9 +8,9 @@ export class MPQUserDataHeader {
   public content: Buffer;
 
   constructor(obj?: Buffer) {
-    	this.magic              = obj && obj.toString('utf8', 0, 4) || null;
-	    this.userDataSize       = obj && obj.readUInt32LE(4)        || null;
-	    this.mpqHeaderOffset    = obj && obj.readUInt32LE(8)        || null;
-	    this.userDataHeaderSize = obj && obj.readUInt32LE(12)       || null;
+    	this.magic              = obj && obj.toString('utf8', 0, 4);
+	    this.userDataSize       = obj && obj.readUInt32LE(4);
+	    this.mpqHeaderOffset    = obj && obj.readUInt32LE(8);
+	    this.userDataHeaderSize = obj && obj.readUInt32LE(12);
   }
 }

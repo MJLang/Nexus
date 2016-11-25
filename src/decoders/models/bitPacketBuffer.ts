@@ -12,10 +12,7 @@ export class BitPacketBuffer {
   }
 
   public toString() {
-    return `
-    buffer(${(this.nextbits && this.next || 0).toString(16)}/${this.nextbits},[${this.used}]=
-    ${((this.used < this.data.length) ? this.data.readUInt8(this.used).toString(16) : '--')}
-    )`;
+    return `buffer(${(this.nextbits && this.next || 0).toString(16)}/${this.nextbits},[${this.used}]=${((this.used < this.data.length) ? this.data.readUInt8(this.used).toString(16) : '--')})`;
   }
 
   public done() {
@@ -42,34 +39,33 @@ export class BitPacketBuffer {
   }
 
   public readBits(bits: number) {
-    let result = 0;
-    let resultBits = 0;
-
-    while (resultBits != bits) {
-      if (this.nextbits == 0) {
+    var result = 0;
+    var resultbits = 0;
+    while (resultbits !== bits) {
+      if (this.nextbits === 0) {
         if (this.done()) {
           throw new TruncateError(this.toString());
         }
         this.next = this.data.readUInt8(this.used);
-        this.used++;
-        this.nextbits = 0;
+        this.used += 1;
+        this.nextbits = 8;
       }
 
-      let copybits = Math.min(bits - resultBits, this.nextbits);
-      let copy = this.next & ((1 << copybits) - 1);
+      var copybits = Math.min(bits - resultbits, this.nextbits);
+      var copy = this.next & ((1 << copybits) - 1);
 
       if (this.endian === Endian.Big) {
-        result |= copy << (bits - resultBits - copybits)
+        result |= copy << (bits - resultbits - copybits);
       } else {
-        result |= copy << resultBits;
+        result |= copy << resultbits;
       }
 
       this.next >>= copybits;
       this.nextbits -= copybits;
-      resultBits += copybits;
+      resultbits += copybits;
     }
 
-    return result;
+  return result;
   }
 
   public readUnalignedBytes(bytes: number) {

@@ -1,5 +1,5 @@
 export function parseStrings(data) {
-  if (!data) {
+``  if (!data) {
     return data;
   } else if (data instanceof Buffer) {
     return data.toString()

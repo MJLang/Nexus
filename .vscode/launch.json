@@ -1,0 +1,52 @@
+{
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceRoot}/index.js",
+      "cwd": "${workspaceRoot}",
+      "outFiles": [],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Process",
+      "port": 5858,
+      "outFiles": [],
+      "sourceMaps": true
+    },
+    {
+      "name": "Run Mocha",
+      "type": "node",
+      "request": "launch",
+      "sourceMaps": true,
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "stopOnEntry": false,
+      "args": ["--no-timeouts", 
+               "--colors", 
+               "./.test/test/**/*.js"], //you can specify paths to specific tests here
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": {
+        "NODE_ENV": "testing"
+      }
+    },
+    {
+      "name": "Launch via NPM",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+          "run-script", "test:debug"
+      ],
+      "port": 5858
+    }
+  ]
+}

@@ -18,12 +18,9 @@ export class VersionDecoder {
     if (typeId >= this.typeInfo.length) {
       throw new CorruptedError(this.toString());
     }
-    console.log('typeId', typeId);
     let typeInfo = this.typeInfo[typeId];
-    console.log('typeInfo', typeInfo);
-    console.log('typeinfo[0]', typeInfo[0]);
-    console.log('what', this);
-    return this[typeInfo[0]].apply(this, typeInfo[1]);
+    let functionToCall = (<string>typeInfo[0]).replace('_', '');
+    return this[functionToCall].apply(this, typeInfo[1]);
   }
 
   public byteAlign() {
@@ -31,11 +28,11 @@ export class VersionDecoder {
   }
 
   public done() {
-    this.data.done();
+    return this.data.done();
   }
 
   public usedBits() {
-    this.data.usedBits();
+    return this.data.usedBits();
   }
 
   private expectSkip(expected) {
@@ -50,13 +47,11 @@ export class VersionDecoder {
     let negative = b & 1;
     let result = (b >> 1) & 0x3f;
     let bits = 6;
-
     while ((b & 0x80) !== 0) {
       b = this.data.readBits(8);
       result |= (b & 0x7f) << bits;
       bits += 7;
     }
-
     return negative ? -result : result;
   }
 
@@ -135,12 +130,17 @@ export class VersionDecoder {
   }
 
   private struct(fields: Array<any>) {
+    function matchTag(tag) {
+      return function (field) {
+        return tag === field[2];
+      };
+    }
+    this.expectSkip(5);
     let result = {};
     let length = this.vint();
-
     for (let i = 0; i < length; i++) {
       let tag = this.vint();
-      let field = fields.find(f => f[2] === tag);
+      let field = fields.find(matchTag(tag));
       if (field) {
         if (field[0] === '__parent') {
           let parent = this.instance(field[1]);
@@ -158,6 +158,7 @@ export class VersionDecoder {
         this.skipInstance();
       }
     }
+    return result;
   }
 
   private skipInstance() {

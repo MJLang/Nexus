@@ -133,6 +133,62 @@ export class MPQArchive {
     }
   };
 
+  public readFile(filename: string, forceDecompress?: boolean): Buffer {
+    let hashEntry = this.getHashTableEntry(filename);
+    if (!hashEntry) return null;
+    let blockEntry = this.blockTable[hashEntry.blockTableIndex];
+    if (blockEntry.flags & MPQ_FILE_EXISTS) {
+      if (blockEntry.archivedSize === 0) return null;
+
+      let offset = blockEntry.offset + this.header.offset;
+      let fileData = this.file.slice(offset, offset + blockEntry.archivedSize);
+
+      if (blockEntry.flags & MPQ_FILE_ENCRYPTED) {
+        throw new Error('Encryption not supported');
+      }
+
+      if (!(blockEntry.flags & MPQ_FILE_SINGLE_UNIT)) {
+
+        let sectorSize = 512 << this.header.sectorSizeShift;
+        let sectors = Math.trunc(blockEntry.size / sectorSize) + 1;
+
+        let crc;
+
+        if (blockEntry.flags & MPQ_FILE_SECTOR_CRC) {
+          crc = true;
+          sectors++;
+        } else {
+          crc = false;
+        }
+
+        let positions = [], i;
+        for (i = 0; i < (sectors + i); i += 1) {
+          positions[i] = fileData.readUInt32LE(i * 4);
+        }
+
+        let ln = positions.length - (crc ? 2 : 1);
+        let result = new Buffer(0);
+        let sectorBytesLeft = blockEntry.size;
+
+        for (i = 0; i < ln; i+= 1) {
+          let sector = fileData.slice(positions[i], positions[i + 1]);
+          if ((blockEntry.flags & MPQ_FILE_COMPRESS) && (forceDecompress || (sectorBytesLeft > sector.length))) {
+            sector = this.decompress(sector);
+          }
+          sectorBytesLeft -= sector.length;
+
+          result = Buffer.concat([result, sector]);
+        }
+        fileData = result;
+      } else {
+        if ((blockEntry.flags & MPQ_FILE_COMPRESS) && (forceDecompress || (blockEntry.size > blockEntry.archivedSize))) {
+          fileData = this.decompress(fileData);
+        }
+      }
+      return fileData;
+    }
+  }
+
   private readHeader(): MPQFileHeader {
     let magic = this.file.toString('utf8', 0, 4);
     let header: MPQFileHeader;
@@ -214,63 +270,7 @@ export class MPQArchive {
     else throw new Error('Unsupported Compression Type');
   }
 
-  private readFile(filename: string, forceDecompress?: boolean): Buffer {
-    let hashEntry = this.getHashTableEntry(filename);
-    if (!hashEntry) return null;
 
-    let blockEntry = this.blockTable[hashEntry.blockTableIndex];
-
-    if (blockEntry.flags & MPQ_FILE_EXISTS) {
-      if (blockEntry.archivedSize === 0) return null;
-
-      let offset = blockEntry.offset + this.header.offset;
-      let fileData = this.file.slice(offset, offset + blockEntry.archivedSize);
-
-      if (blockEntry.flags & MPQ_FILE_ENCRYPTED) {
-        throw new Error('Encryption not supported');
-      }
-
-      if (!(blockEntry.flags & MPQ_FILE_SINGLE_UNIT)) {
-
-        let sectorSize = 512 << this.header.sectorSizeShift;
-        let sectors = Math.trunc(blockEntry.size / sectorSize) + 1;
-
-        let crc;
-
-        if (blockEntry.flags & MPQ_FILE_SECTOR_CRC) {
-          crc = true;
-          sectors++;
-        } else {
-          crc = false;
-        }
-
-        let positions = [], i;
-        for (i = 0; i < (sectors + i); i += 1) {
-          positions[i] = fileData.readUInt32LE(i * 4);
-        }
-
-        let ln = positions.length - (crc ? 2 : 1);
-        let result = new Buffer(0);
-        let sectorBytesLeft = blockEntry.size;
-
-        for (i = 0; i < ln; i+= 1) {
-          let sector = fileData.slice(positions[i], positions[i + 1]);
-          if ((blockEntry.flags & MPQ_FILE_COMPRESS) && (forceDecompress || (sectorBytesLeft > sector.length))) {
-            sector = this.decompress(sector);
-          }
-          sectorBytesLeft -= sector.length;
-
-          result = Buffer.concat([result, sector]);
-        }
-        fileData = result;
-      } else {
-        if ((blockEntry.flags & MPQ_FILE_COMPRESS) && (forceDecompress || (blockEntry.size > blockEntry.archivedSize))) {
-          fileData = this.decompress(fileData);
-        }
-      }
-      return fileData;
-    }
-  }
 
   private extract() {
     if (this.files) {
