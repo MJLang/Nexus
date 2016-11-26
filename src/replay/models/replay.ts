@@ -1,11 +1,13 @@
+import { groupBy } from 'lodash';
 import { MPQArchive } from './../../mpq';
 import { parseStrings } from './../../helpers/helper';
 import { protocol as baseProtocol } from './../../protocols/29406';
 import { Protocol } from './../../protocols/protocol';
 import { FILES } from './../../helpers/config';
 import { Hero, Player } from './';
+
 export class Replay {
-  public build: string;
+  public build: number;
   public map: string;
   public players: Array<Player>;
 
@@ -15,7 +17,7 @@ export class Replay {
     let header = parseStrings(baseProtocol.decodeReplayHeader(archive.header.userDataHeader.content));
 
     let replay = new Replay();
-    replay.build = header.m_version.m_baseBuild;
+    replay.build = parseInt(header.m_version.m_baseBuild);
     let protocol = require(`./../../protocols/${replay.build}`);
     if (!protocol) throw new Error('Invalid Replay Build Version');
     protocol = protocol.protocol;
@@ -24,7 +26,7 @@ export class Replay {
     let gameEvents = this.getGameEvents(archive, protocol);
 
     replay.map = details.m_title;
-    replay.players = this.parsePlayers(details, gameEvents);
+    replay.players = this.parsePlayers(details, gameEvents, replay.build);
     return replay;
   }
 
@@ -57,10 +59,13 @@ export class Replay {
     return events.map(e => parseStrings(e));
   }
 
-  private static parsePlayers(details, gameEvents) {
+  private static parsePlayers(details, gameEvents, version) {
     let rawPlayerData = details.m_playerList;
     // Filter out observers:
     rawPlayerData = rawPlayerData.filter(p => p.m_observe === 0);
+
+    let talents = gameEvents.filter(ge => ge.eventType === 'NNet.Game.SHeroTalentTreeSelectedEvent');
+    let groupedTalents = groupBy(talents, 'userId');
 
     let players = rawPlayerData.map(p => {
       return new Player({
@@ -70,14 +75,11 @@ export class Replay {
         slot: p.m_workingSetSlotId,
         team: p.m_color.m_b === 255 ? 'blue' : 'red',
         hero: new Hero({
-          name: p.m_hero
-        })
+          name: p.m_hero,
+          talentIds: groupedTalents[p.m_workingSetSlotId].map((t: any) => t.m_index)
+        }, version)
       });
     });
-
-    let talents = gameEvents.filter(ge => ge.eventType === 'NNet.Game.SHeroTalentTreeSelectedEvent');
-    console.log(talents);
-
     return players;
   }
 }

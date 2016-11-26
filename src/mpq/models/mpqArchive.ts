@@ -280,25 +280,6 @@ export class MPQArchive {
     }
   }
 
-  private extractToDisc() {
-    let extension = extname(this.fileName);
-    let archiveName = basename(this.fileName, extension);
-    let dirName = join(process.cwd(), archiveName);
-
-    try {
-      statSync(dirName);
-    } catch (e) {
-      mkdirSync(dirName);
-    }
-
-    process.chdir(archiveName);
-
-    this.extract().forEach(pair => {
-      writeFileSync(pair[0], pair[1] || '');
-    });
-  }
-
-
 
   private leadingChar(str, ch, ln, after?) {
     str = '' + str;
@@ -316,10 +297,9 @@ export class MPQArchive {
     let seed1 = Long.fromValue(0x7FED7FED);
     let seed2 = Long.fromValue(0xEEEEEEEE);
     let value;
-    for (let char of str.toUpperCase()) {
-      let charCP;
+    let char: any;
+    for (char of str.toUpperCase()) {
       if (isNaN(parseInt(char, 10))) char = char.codePointAt(0);
-
       value = Long.fromValue(this.encryptionTable[(hashTypes[hashType] << 8) + char]);
       seed1 = value.xor(seed1.add(seed2)).and(0xFFFFFFFF);
       seed2 = seed1.add(seed2).add(char).add(seed2.shiftLeft(5)).add(3).and(0xFFFFFFFF);
@@ -332,7 +312,7 @@ export class MPQArchive {
     let result = new Buffer(data.length);
     let length = data.length / 4;
 
-    let seed1 = Long.fromValue(key);
+    let seed1: any = Long.fromValue(key);
     let seed2 = Long.fromValue(0xEEEEEEEE);
     for (let i = 0; i < length; i += 1) {
       seed2 = seed2.add(this.encryptionTable[0x400 + (seed1 & 0xFF)]);

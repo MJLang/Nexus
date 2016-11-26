@@ -29,5 +29,5 @@ export class MPQFileHeader {
     this.blockTableOffset   = obj && obj.readUInt32LE(20);
     this.hashTableEntries   = obj && obj.readUInt32LE(24);
     this.blockTableEntries  = obj && obj.readUInt32LE(28);
+  }
 }
-

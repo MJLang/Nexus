@@ -14,7 +14,7 @@ gulp.task('ts', () => {
 
 });
 
-gulp.task('ts:test', ['copy:test'], () => {
+gulp.task('ts:test', ['copy:data:test'], () => {
   let tsProject = ts.createProject('./test/tsconfig.json');
   let tsResult = tsProject.src()
                           .pipe(sourcemap.init())

@@ -5,6 +5,6 @@ export const FILES = {
   GAME_EVENTS: 'replay.game.events',
   MESSAGE_EVENTS: 'replay.message.events',
   TRACKER_EVENTS: 'replay.tracker.events',
-  ATTRIBUTES_EVENTS: 'replay.attributes.events';
+  ATTRIBUTES_EVENTS: 'replay.attributes.events',
 };
 

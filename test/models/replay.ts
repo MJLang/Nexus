@@ -4,8 +4,8 @@ import * as path from 'path';
 
 describe('Replay', () => {
   it('Should be able to parse Replay from MPQ', () => {
-    let dragon_shire = path.normalize(path.join(__dirname, '..', 'support', 'dragon_shire.StormReplay'));
+    let dragon_shire = path.normalize(path.join(__dirname, '..', 'support', 'warhead_junction.StormReplay'));
     let replay = Replay.fromMPQ(dragon_shire);
-    console.log(replay);
+    console.log(replay.players.map(r => r.hero));
   });
 });

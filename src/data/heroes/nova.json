@@ -1,0 +1,30 @@
+{
+  "availableVersions": [48297],
+  "48297": {
+    "talents": [
+      "Tactical Espionage",
+      "Advanced Cloaking",
+      "Longshot",
+      "Covert Ops",
+      "Remote Delivery",
+      "Rapid Projection",
+      "Holo Stability",
+      "Covert Mission",
+      "One in the Chamber",
+      "Anti-Armor Shells",
+      "Snipe Master",
+      "Triple Tap",
+      "Precision Strike",
+      "Double Tap",
+      "Psionic Efficiency",
+      "Explosive Round",
+      "Perfect Shot",
+      "Crippling Shot",
+      "Lethal Decoy",
+      "Fast Reload",
+      "Precision Barrage",
+      "Rewind",
+      "Ghost Protocol"
+    ]
+  }
+}

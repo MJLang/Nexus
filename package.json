@@ -4,7 +4,6 @@
   "description": "Heroes of the Storm Replay Parser",
   "main": "index.js",
   "scripts": {
-    
     "pretest": "tsc -p test/tsconfig.json",
     "test": "mocha --color --no-timeouts ./.test/test/**/*.js",
     "test:debug": "npm run test -- --debug-brk"
@@ -16,6 +15,7 @@
     "@types/gulp": "^3.8.32",
     "@types/gulp-sourcemaps": "0.0.29",
     "@types/gulp-typescript": "0.0.32",
+    "@types/lodash": "^4.14.40",
     "@types/long": "^3.0.31",
     "@types/mocha": "^2.2.32",
     "@types/sinon": "^1.16.31",
@@ -33,6 +33,7 @@
     "typescript": "^2.0.6"
   },
   "dependencies": {
+    "lodash": "^4.17.2",
     "long": "^3.2.0",
     "seek-bzip": "^1.0.5"
   }

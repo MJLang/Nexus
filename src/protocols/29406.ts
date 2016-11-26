@@ -1,4 +1,5 @@
 import * as decoders from './../decoders';
+import { CorruptedError } from './../errors';
 import { Protocol } from './protocol';
 
 const version = 29406;
@@ -325,10 +326,113 @@ const gameDetailsTypeId = 39;
 const replayInitdataTypeId = 67;
 
 
-function decodeReplayHeader(content) {
-  let decoder = new decoders.VersionDecoder(content, typeInfos);
+function varuint32Value(value) {
+  return value[Object.keys(value)[0]];
+}
+
+
+function decodeReplayHeader(contents) {
+  const decoder = new decoders.VersionDecoder(contents, typeInfos);
   return decoder.instance(replayHeaderTypeId);
-};
+}
+
+function decodeReplayDetails(contents) {
+  const decoder = new decoders.VersionDecoder(contents, typeInfos);
+  return decoder.instance(gameDetailsTypeId);
+}
+
+function decodeReplayInitData(contents) {
+  const decoder = new decoders.BitPacketDecoder(contents, typeInfos);
+  return decoder.instance(replayInitdataTypeId);
+}
+
+function decodeReplayAttributesEvents(contents) {
+  let buffer = new decoders.BitPacketBuffer(contents, decoders.Endian.Little);
+  let attributes: any = {};
+
+  if (!buffer.done()) {
+    attributes.source = buffer.readBits(8);
+    attributes.mapNamespace = buffer.readBits(32);
+    
+    let count = buffer.readBits(32);
+    attributes.scopes = {};
+    while (!buffer.done()) {
+      let value: any = {};
+      value.namespace = buffer.readBits(32);
+
+      let attributeId = value.attrId = buffer.readBits(32);
+      let scope = buffer.readBits(8);
+
+      value.value = buffer.readAlignedBytes(4).reverse();
+      while (value.value[0] === 0) value.value = value.value.slice(1);
+      while (value.value[value.value.length - 1] === 0) value.value = value.value.slice(0, -1);
+
+      if (!attributes.scopes[scope]) {
+        attributes.scopes[scope] = {};
+      }
+      if (!attributes.scopes[scope][attributeId]) {
+        attributes.scopes[scope][attributeId] = [];
+      }
+      attributes.scopes[scope][attributeId].push(value);
+    }
+    return attributes;
+
+  }
+}
+
+function decodeReplayMessageEvents(contents) {
+  let decoder = new decoders.BitPacketDecoder(contents, typeInfos);
+  let events = decodeEventStream(decoder, messageEventIdTypeId, gameEventTypes, true);
+  return events;
+}
+
+function decodeReplayTrackerEvents(contents) {
+  let decoder = new decoders.VersionDecoder(contents, typeInfos);
+  let events = decodeEventStream(decoder, trackerEventIdTypeId, gameEventTypes, true);
+  return events;
+}
+
+function decodeReplayGameEvents(contents) {
+  let decoder = new decoders.BitPacketDecoder(contents, typeInfos);
+  let events = decodeEventStream(decoder, gameEventIdTypeId, gameEventTypes, true);
+  return events;
+}
+
+function decodeEventStream(decoder: decoders.BitPacketDecoder | decoders.VersionDecoder, eventIdTypeId, eventTypes, decodeUserId) {
+  let gameLoop = 0;
+  let events = [];
+  while (!decoder.done()) {
+    let startBit = decoder.usedBits();
+
+    let delta = varuint32Value(decoder.instance(svaruint32TypeId));
+    gameLoop += delta;
+
+    let userId;
+    if (decodeUserId) {
+      userId = decoder.instance(replayUserIdTypeId);
+    }
+
+    let eventId = decoder.instance(eventIdTypeId);
+    let eventType = eventTypes[eventId] || [null, null];
+    let typeId = eventType[0];
+    let typeName = eventType[1];
+    if (typeId === null) throw new CorruptedError();
+
+    let rawEvent = decoder.instance(typeId);
+
+    let eventMetaData = {
+      eventType: typeName,
+      eventId: eventId,
+      gameLoop: gameLoop,
+      userId: userId ? userId.m_userId : undefined
+    };
+    decoder.byteAlign();
+    rawEvent.bits = decoder.usedBits() - startBit;
+    let event = Object.assign(rawEvent, eventMetaData);
+    events.push(event);
+  }
+  return events;
+}
 
 
 function unitTag(tagIndex, tagRecycle) {
@@ -340,10 +444,10 @@ function unitTagIndex(tag) {
 }
 
 function unitTagRecycle(tag) {
-  return tag & 0x0003FFFF;
+  return tag & 0x00003FFFF;
 }
 
-export const protocol: Protocol = {
+const protocol: Protocol = {
   version,
   typeInfos,
   gameEventTypes,
@@ -355,13 +459,17 @@ export const protocol: Protocol = {
   replayUserIdTypeId,
   gameDetailsTypeId,
   replayInitdataTypeId,
-
-  // varuint32Value,
+  varuint32Value,
   decodeReplayHeader,
-  // decodeReplayDetails,
-  // decodeReplayInitData,
-  // decodeReplayAttributesEvents,
-  // unitTag,
-  // unitTagIndex,
-  // unitTagRecycle,
-}
+  decodeReplayDetails: decodeReplayDetails,
+  decodeReplayInitData,
+  decodeReplayAttributesEvents,
+  decodeReplayGameEvents,
+  decodeReplayMessageEvents,
+  decodeReplayTrackerEvents,
+  unitTag,
+  unitTagIndex,
+  unitTagRecycle,
+};
+
+export { protocol }
