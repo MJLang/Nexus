@@ -16,8 +16,13 @@ export class Hero {
 
   private parseTalents(version: number) {
     let parsedName = this.name.replace(/\W+/g, '_').replace(/_+/g, '_').toLowerCase();
-    let path = join(__dirname, normalize(`./../../data/heroes/${parsedName}.json`));
-    let data = require(path);
+    let data;
+    try {
+      let path = normalize(join(__dirname, '..', '..', 'data', 'heroes', parsedName));
+      data = require(path);
+    } catch (e) {
+      return;
+    }
     // Check if we found the hero
     if (!data) {
       return;
