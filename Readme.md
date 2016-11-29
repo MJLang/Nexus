@@ -77,3 +77,6 @@ Bug Reports & Pull Requests are always welcome!
 ## License
 
 [The MIT License](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2016, Martin Lang-Roman
+Copyright (c) 2016 Blizzard Entertainment
