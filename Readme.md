@@ -1,6 +1,7 @@
 # Nexus - a Heroes of the Storm Replay Parser
+[![npm version](https://badge.fury.io/js/nexus-parser.svg)](https://badge.fury.io/js/nexus-parser)
 
-Thanks go to [@farof](https://github.com/Farof)  for inspiration with the MPQ Parser  
+Thanks goes to [@farof](https://github.com/Farof)  for inspiration with the MPQ Parser  
 
 Nexus is a simple ES6 parser for Heroes of the Storm Replay `.StormReplay` files.
 
