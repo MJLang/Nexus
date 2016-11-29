@@ -21,7 +21,7 @@ let replay = Replay.fromFile(<path/to/replay.StormReplay>);
 ```js
 const { Replay } = require('nexus-parser');
 let replay = Replay.fromFile(<path/to/replay.StormReplay>);
-
+```
 
 ## Whats in the Replay?
 
@@ -67,3 +67,12 @@ Example from Build 48297
        'Nexus Blades' ] 
   
 }
+```
+
+## Contributing
+
+Bug Reports & Pull Requests are always welcome!
+
+## License
+
+[The MIT License](http://opensource.org/licenses/MIT)
