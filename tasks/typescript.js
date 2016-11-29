@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const ts = require('gulp-typescript');
 const sourcemap = require('gulp-sourcemaps');
+const merge = require('merge2');
 
 gulp.task('ts', () => {
   let tsProject = ts.createProject('tsconfig.json');
@@ -8,9 +9,10 @@ gulp.task('ts', () => {
                           // .pipe(sourcemap.init())
                           .pipe(tsProject());
 
-  return tsResult.js
-                //  .pipe(sourcemap.write())
-                 .pipe(gulp.dest('./lib'));
+  return merge([
+      tsResult.js.pipe(gulp.dest('./lib')),
+      tsResult.dts.pipe(gulp.dest('./lib')),
+      ]);
 
 });
 

@@ -2,7 +2,12 @@
   "name": "nexus-parser",
   "version": "1.0.1",
   "description": "Heroes of the Storm Replay Parser",
-  "keywords": ["heroes of the storm", "heroes", "blizzard", "mpq"],
+  "keywords": [
+    "heroes of the storm",
+    "heroes",
+    "blizzard",
+    "mpq"
+  ],
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -31,6 +36,7 @@
     "gulp-mocha": "^3.0.1",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-typescript": "^3.1.2",
+    "merge2": "^1.0.2",
     "mocha": "^3.1.2",
     "require-dir": "^0.3.1",
     "run-sequence": "^1.2.2",

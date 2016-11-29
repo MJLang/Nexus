@@ -4,7 +4,9 @@
         "target": "es6",
         "noImplicitAny": false,
         "sourceMap": false,
-        "outDir": "lib"
+        "outDir": "lib",
+        "declaration": true,
+        "declarationDir": "lib"
     },
     "exclude": [
         "test",
