@@ -3,3 +3,6 @@ src/**
 tasks/**
 .vscode/**
 .test/**
+Gulpfile.js
+tsconfig.json
+tslint.json
