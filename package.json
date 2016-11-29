@@ -2,7 +2,7 @@
   "name": "nexus",
   "version": "1.0.0",
   "description": "Heroes of the Storm Replay Parser",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "pretest": "tsc -p test/tsconfig.json",
     "test": "mocha --color --no-timeouts ./.test/test/**/*.js",
@@ -28,6 +28,7 @@
     "gulp-typescript": "^3.1.2",
     "mocha": "^3.1.2",
     "require-dir": "^0.3.1",
+    "run-sequence": "^1.2.2",
     "sinon": "^1.17.6",
     "tslint": "^3.15.1",
     "typescript": "^2.0.6"

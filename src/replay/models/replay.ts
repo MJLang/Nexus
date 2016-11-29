@@ -11,7 +11,7 @@ export class Replay {
   public map: string;
   public players: Array<Player>;
 
-  static fromMPQ(filename): Replay {
+  static fromFile(filename): Replay {
     let archive = new MPQArchive(filename);
     let content = archive.header.userDataHeader.content;
     let header = parseStrings(baseProtocol.decodeReplayHeader(archive.header.userDataHeader.content));
