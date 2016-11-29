@@ -1,5 +1,5 @@
 {
-  "name": "nexus",
+  "name": "nexus-parser",
   "version": "1.0.0",
   "description": "Heroes of the Storm Replay Parser",
   "main": "lib/index.js",

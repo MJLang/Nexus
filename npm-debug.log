@@ -1,0 +1,129 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/mlang/.nvm/versions/node/v6.9.1/bin/node',
+1 verbose cli   '/Users/mlang/.nvm/versions/node/v6.9.1/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.8
+3 info using node@v6.9.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/mlang/Development/nexus',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/mlang/.npm/nexus/1.0.0/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/mlang/.npm correctMkdir not in flight; initializing
+10 info lifecycle nexus@1.0.0~prepublish: nexus@1.0.0
+11 silly lifecycle nexus@1.0.0~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/mlang/.npm/nexus/1.0.0/package.tgz',
+12 verbose tar pack   '/Users/mlang/Development/nexus' ]
+13 verbose tarball /Users/mlang/.npm/nexus/1.0.0/package.tgz
+14 verbose folder /Users/mlang/Development/nexus
+15 verbose addLocalTarball adding from inside cache /Users/mlang/.npm/nexus/1.0.0/package.tgz
+16 verbose correctMkdir /Users/mlang/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd nexus@1.0.0
+18 verbose afterAdd /Users/mlang/.npm/nexus/1.0.0/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/mlang/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/mlang/.npm/nexus/1.0.0/package/package.json written
+21 silly publish { name: 'nexus',
+21 silly publish   version: '1.0.0',
+21 silly publish   description: 'Heroes of the Storm Replay Parser',
+21 silly publish   main: 'lib/index.js',
+21 silly publish   scripts:
+21 silly publish    { pretest: 'tsc -p test/tsconfig.json',
+21 silly publish      test: 'mocha --color --no-timeouts ./.test/test/**/*.js',
+21 silly publish      'test:debug': 'npm run test -- --debug-brk' },
+21 silly publish   author: { name: 'Martin Lang-Roman', email: 'martin@mercator.io' },
+21 silly publish   license: 'MIT',
+21 silly publish   devDependencies:
+21 silly publish    { '@types/chai': '^3.4.34',
+21 silly publish      '@types/gulp': '^3.8.32',
+21 silly publish      '@types/gulp-sourcemaps': '0.0.29',
+21 silly publish      '@types/gulp-typescript': '0.0.32',
+21 silly publish      '@types/lodash': '^4.14.40',
+21 silly publish      '@types/long': '^3.0.31',
+21 silly publish      '@types/mocha': '^2.2.32',
+21 silly publish      '@types/sinon': '^1.16.31',
+21 silly publish      chai: '^3.5.0',
+21 silly publish      del: '^2.2.2',
+21 silly publish      eslint: '^3.9.1',
+21 silly publish      gulp: '^3.9.1',
+21 silly publish      'gulp-mocha': '^3.0.1',
+21 silly publish      'gulp-sourcemaps': '^2.2.0',
+21 silly publish      'gulp-typescript': '^3.1.2',
+21 silly publish      mocha: '^3.1.2',
+21 silly publish      'require-dir': '^0.3.1',
+21 silly publish      'run-sequence': '^1.2.2',
+21 silly publish      sinon: '^1.17.6',
+21 silly publish      tslint: '^3.15.1',
+21 silly publish      typescript: '^2.0.6' },
+21 silly publish   dependencies: { lodash: '^4.17.2', long: '^3.2.0', 'seek-bzip': '^1.0.5' },
+21 silly publish   readme: '## Nexus - a Heroes of the Storm Replay Parser\n\nThangs go to [@farof](https://github.com/Farof)  for inspiration with the MPQ Parser  \n\nStill heavy WIP.',
+21 silly publish   readmeFilename: 'Readme.md',
+21 silly publish   gitHead: '3c648a3d42e81332917e713529fb9b14506ea7a6',
+21 silly publish   _id: 'nexus@1.0.0',
+21 silly publish   _shasum: '368c658d864e8300ba47ba64e782fcc31d593c70',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name nexus
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'nexus',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'nexus',
+26 silly mapToRegistry   name: 'nexus',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/nexus
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/mlang/.npm/nexus/1.0.0/package.tgz
+30 verbose request uri https://registry.npmjs.org/nexus
+31 verbose request always-auth set; sending authorization
+32 info attempt registry request try #1 at 7:19:57 PM
+33 verbose request using bearer token for auth
+34 verbose request id 4b326b6fd01a43d7
+35 http request PUT https://registry.npmjs.org/nexus
+36 http 403 https://registry.npmjs.org/nexus
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '99',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Tue, 29 Nov 2016 03:19:57 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sea1923-SEA',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1480389597.609502,VS0,VE114',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/mlang/.npm/registry.npmjs.org/nexus on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: you do not have permission to publish "nexus". Are you logged in as the correct user? : nexus
+40 verbose stack     at makeError (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+40 verbose stack     at Request._callback (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+40 verbose stack     at Request.self.callback (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:187:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:1044:10)
+40 verbose stack     at emitOne (events.js:96:13)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/mlang/.nvm/versions/node/v6.9.1/lib/node_modules/npm/node_modules/request/request.js:965:12)
+41 verbose statusCode 403
+42 verbose pkgid nexus
+43 verbose cwd /Users/mlang/Development/nexus
+44 error Darwin 16.1.0
+45 error argv "/Users/mlang/.nvm/versions/node/v6.9.1/bin/node" "/Users/mlang/.nvm/versions/node/v6.9.1/bin/npm" "publish"
+46 error node v6.9.1
+47 error npm  v3.10.8
+48 error code E403
+49 error you do not have permission to publish "nexus". Are you logged in as the correct user? : nexus
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
