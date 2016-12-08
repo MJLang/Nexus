@@ -26,7 +26,7 @@ import { GameEvent } from './../replay/models';
 const version = 47479;
 // Decoding instructions for each protocol type.
 const typeInfos = [
-       ['_int',[[0,7]]],  //0
+    ['_int',[[0,7]]],  //0
     ['_int',[[0,4]]],  //1
     ['_int',[[0,5]]],  //2
     ['_int',[[0,6]]],  //3
@@ -66,7 +66,7 @@ const typeInfos = [
     ['_optional',[36]],  //37
     ['_array',[[0,6],30]],  //38
     ['_optional',[38]],  //39
-    ['_struct',[[['m_playerList',28,0],['m_title',29,1],['m_difficulty',9,2],['m_thumbnail',31,3],['m_isBlizzardMap',13,4],['m_restartAsTransitionMap',32,16],['m_timeUTC',33,5],['m_timeLocalOffset',33,6],['m_description',34,7],['m_imageFilePath',30,8],['m_campaignIndex',10,15],['m_mapFileName',30,9],['m_cacheHandles',37,10],['m_miniSave',13,11],['m_gameSpeed',12,12],['m_defaultDifficulty',3,13],['m_modPaths',39,14]]]],  //40
+    ['_struct',[[['m_playerList',28,0],['m_title',29,1],['m_difficulty',9,2],['m_thumbnail',31,3],['m_isBlizzardMap',13,4],['m_restartAsTransitionMap',32,16],['m_timeUTC',33,5],['m_timeLocalOffset',33,6],['m_description',34,7],['m_imageFilePath',30,8],['m_campaignIndex',10,15],['m_mapFileName',30,9],['m_cacheHandles',37,10],['m_miniSave',13, 11], ['m_gameSpeed', 12, 12], ['m_defaultDifficulty',3,13],['m_modPaths',39,14]]]],  //40
     ['_optional',[9]],  //41
     ['_optional',[35]],  //42
     ['_optional',[6]],  //43
@@ -311,7 +311,7 @@ const gameEventTypes = {
 };
 
 // The typeid of the NNet.Game.EEventId enum.
-const gameEventIdTypeId = 0;
+const gameEventIdTypeId = 0
 
 // Map from protocol NNet.Game.*Message eventid to [typeid, name]
 const messageEventTypes = {
@@ -324,7 +324,7 @@ const messageEventTypes = {
 }
 
 // The typeid of the NNet.Game.EMessageId enum.
-const messageEventidTypeId = 1;
+const messageEventidTypeId = 1
 
 // Map from protocol NNet.Replay.Tracker.*Event eventid to [typeid, name]
 const trackerEventTypes = {

@@ -26,7 +26,7 @@ import { GameEvent } from './../replay/models';
 const version = 47479;
 // Decoding instructions for each protocol type.
 const typeInfos = [
-       ['_int',[[0,7]]],  //0
+ ['_int',[[0,7]]],  //0
     ['_int',[[0,4]]],  //1
     ['_int',[[0,5]]],  //2
     ['_int',[[0,6]]],  //3
@@ -237,7 +237,7 @@ const typeInfos = [
 
 // Map from protocol NNet.Game.*Event eventid to [typeid, name]
 const gameEventTypes = {
-   5: [78, 'NNet.Game.SUserFinishedLoadingSyncEvent'],
+      5: [78, 'NNet.Game.SUserFinishedLoadingSyncEvent'],
     7: [77, 'NNet.Game.SUserOptionsEvent'],
     9: [70, 'NNet.Game.SBankFileEvent'],
     10: [72, 'NNet.Game.SBankSectionEvent'],
